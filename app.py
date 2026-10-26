@@ -3,12 +3,10 @@ from flask import Flask, request, jsonify, render_template
 import requests
 from dotenv import load_dotenv
 
-# Load environment variables from .env
 load_dotenv()
 
 app = Flask(__name__)
 
-# Fetch API keys from environment variables
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
 
@@ -19,13 +17,11 @@ def home():
 @app.route("/chat", methods=["POST"])
 def chat():
     user_input = request.json.get("message")
-    model = request.json.get("model", "google/gemma-4-31b-it:free")
+    model = request.json.get("model", "openrouter/free")
     
     if not user_input:
         return jsonify({"error": "No message provided"}), 400
 
-    # Determine provider based on model selection
-    # DeepSeek models include 'deepseek' in their names
     if "deepseek" in model.lower():
         provider = "deepseek"
         api_url = "https://api.deepseek.com/v1/chat/completions"
@@ -56,7 +52,6 @@ def chat():
             }
         )
         
-        # Handle specific error status codes from providers nicely
         if response.status_code == 402:
             return jsonify({
                 "error": f"API Provider Error (402): Insufficient balance on the {provider} API key. Please switch to a free OpenRouter model (e.g. Gemma 4) or top up your balance."
@@ -78,7 +73,6 @@ def chat():
 
         data = response.json()
         
-        # OpenRouter and DeepSeek use the same OpenAI-compatible response schema
         reply = data["choices"][0]["message"]["content"]
         return jsonify({"reply": reply})
 

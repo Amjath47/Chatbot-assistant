@@ -1,6 +1,6 @@
 import requests
 
-api_key = "sk-380a85f89aa546839c92e1b8c0a8e09f"  # your key
+api_key = "sk-c7ce2334505a43b5b763cff1ad538f63"
 
 response = requests.get(
     "https://api.deepseek.com/v1/models",
