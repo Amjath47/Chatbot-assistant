@@ -1,10 +1,11 @@
 import requests
+import os
 
-api_key = "sk-c7ce2334505a43b5b763cff1ad538f63"
+API_KEY = os.getenv("DEEPSEEK_API_KEY")
 
 response = requests.get(
     "https://api.deepseek.com/v1/models",
-    headers={"Authorization": f"Bearer {api_key}"}
+    headers={"Authorization": f"Bearer {API_KEY}"}
 )
 
 print(response.status_code)
